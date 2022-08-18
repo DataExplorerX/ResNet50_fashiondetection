@@ -47,7 +47,7 @@ def train(model, dataloader, optimizer, loss_fn, dataset, device):
         optimizer.zero_grad()
         
         outputs = model(image)
-        targets = (productDisplayName,articleType, subCategory)
+        targets = (gender,master,sub)
         loss = loss_fn(outputs, targets)
         train_running_loss += loss.item()
         
@@ -72,7 +72,7 @@ def validate(model, dataloader, loss_fn, dataset, device):
         sub = data['subCategory'].to(device)
         
         outputs = model(image)
-        targets = (productDisplayName,articleType, subCategory)
+        targets = (gender,master,sub)
         loss = loss_fn(outputs, targets)
         val_running_loss += loss.item()
         
@@ -81,12 +81,8 @@ def validate(model, dataloader, loss_fn, dataset, device):
 train_loss, val_loss = [], []
 for epoch in range(epochs):
     print(f"Epoch {epoch+1} of {epochs}")
-    train_epoch_loss = train(
-        model, train_dataloader, optimizer, loss_fn, train_dataset, device
-    )
-    val_epoch_loss = validate(
-        model, val_dataloader, loss_fn, val_dataset, device
-    )
+    train_epoch_loss = train(model, train_dataloader, optimizer, loss_fn, train_dataset, device)
+    val_epoch_loss = validate(model, val_dataloader, loss_fn, val_dataset, device)
     train_loss.append(train_epoch_loss)
     val_loss.append(val_epoch_loss)
     print(f"Train Loss: {train_epoch_loss:.4f}")
